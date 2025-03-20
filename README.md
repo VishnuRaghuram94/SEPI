@@ -489,7 +489,7 @@ library(TipDatingBeast)
 <img src="manuscript_figs/png/Fig 4.png" width=70% height=70%>
 </p>
 <p align="center">
-<img src="manuscript_figs/png/FigS7.png" width=70% height=70%>
+<img src="manuscript_figs/png/FigS7A.png" width=70% height=70%>
 </p>
 
 ### Supplemental phylogenies
