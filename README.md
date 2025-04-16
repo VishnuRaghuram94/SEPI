@@ -2,7 +2,9 @@
 SEPI - Salmonella enterica poultry imports . Data analysis code for the study 'Genomic monitoring of Non-typhoidal Salmonella enterica serotype Minnesota associated with poultry meat imports from Brazil to South Africa'
 
 # Genomic surveillance of Salmonella enterica Minnesota strains from Brazilian poultry products imported into South Africa
-##### Authors: Vishnu Raghuram, Thendo Mafuna, Vignesh Ramnath, Hadrien Gourle, Josefin Blom, Laura Carroll, Itumeleng Matle
+##### Authors: Vishnu Raghuram, Thendo Mafuna, Vignesh Ramnath, Hadrien Gourlé, Josefin Blom, Laura Carroll, Itumeleng Matle
+
+##### All raw data can be found in https://zenodo.org/records/15063662
 
 ## Load libraries
 
