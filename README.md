@@ -5,6 +5,7 @@ SEPI - Salmonella enterica poultry imports . Data analysis code for the study 'G
 ##### Authors: Vishnu Raghuram, Thendo Mafuna, Vignesh Ramnath, Hadrien Gourlé, Josefin Blom, Laura Carroll, Itumeleng Matle
 
 ##### All raw data can be found in https://zenodo.org/records/15063662
+##### The preprint can be found here - https://doi.org/10.1101/2025.04.16.25325939
 
 ## Load libraries
 
