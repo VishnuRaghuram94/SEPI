@@ -1,11 +1,11 @@
 # SEPI
-SEPI - Salmonella enterica poultry imports . Data analysis code for the study 'Genomic monitoring of Non-typhoidal Salmonella enterica serotype Minnesota associated with poultry meat imports from Brazil to South Africa'
+SEPI - Salmonella enterica poultry imports . Data analysis code for the study 'Genomic surveillance of Salmonella enterica serotype Minnesota strains from poultry products imported into South Africa'
 
-# Genomic surveillance of Salmonella enterica Minnesota strains from Brazilian poultry products imported into South Africa
+# Genomic surveillance of Salmonella enterica serotype Minnesota strains from poultry products imported into South Africa
 ##### Authors: Vishnu Raghuram, Thendo Mafuna, Vignesh Ramnath, Hadrien Gourlé, Josefin Blom, Laura Carroll, Itumeleng Matle
 
 ##### All raw data can be found in https://zenodo.org/records/15063662
-##### The preprint can be found here - https://doi.org/10.1101/2025.04.16.25325939
+##### The preprint can be found here - https://www.medrxiv.org/content/10.1101/2025.04.16.25325939v2
 
 ## Load libraries
 
