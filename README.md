@@ -3,6 +3,10 @@
 
 SEPI - Salmonella enterica poultry imports . Data analysis code for the study 'Genomic monitoring of Non-typhoidal Salmonella enterica serotype Minnesota associated with poultry meat imports from Brazil to South Africa'
 
+Link to raw data and intermediate files - https://doi.org/10.5281/zenodo.17224261
+
+Link to preprint - https://www.medrxiv.org/content/10.1101/2025.04.16.25325939v2 (Currently still the version prior to revisions)
+
 ## Load libraries
 
 ```{r, echo=F}
