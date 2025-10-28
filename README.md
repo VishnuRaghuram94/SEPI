@@ -1,39 +1,21 @@
 # Genomic surveillance of Salmonella enterica Minnesota strains from poultry products imported into South Africa
-##### Authors: Vishnu Raghuram, Thendo Mafuna, Vignesh Ramnath, Hadrien Gourle, Josefin Blom, Kudakwashe Magwedere,Laura Carroll, Itumeleng Matle
+---
+#### Authors: Vishnu Raghuram, Thendo Mafuna, Vignesh Ramnath, Hadrien Gourle, Josefin Blom, Kudakwashe Magwedere,Laura Carroll, Itumeleng Matle
 
 SEPI - Salmonella enterica poultry imports . Data analysis code for the study 'Genomic monitoring of Non-typhoidal Salmonella enterica serotype Minnesota associated with poultry meat imports from Brazil to South Africa'
 
-Link to raw data and intermediate files - https://doi.org/10.5281/zenodo.17224261
+Link to raw data and intermediate files - <https://doi.org/10.5281/zenodo.15063661>
 
-Link to preprint - https://www.medrxiv.org/content/10.1101/2025.04.16.25325939v2 (Currently still the version prior to revisions)
+Link to BioProject deposit - [PRJNA1230142](https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA1230142)
+
+Link to preprint - <https://www.medrxiv.org/content/10.1101/2025.04.16.25325939v2> (Currently still the version prior to revisions)
 
 ## Load libraries
-
-```{r, echo=F}
-
-library(data.table)
-library(dplyr)
-library(tidyverse)
-library(ggtree)
-library(scales)
-library(cowplot)
-library(treeio)
-library(caper)
-library(ggnewscale)
-library(phytools)
-library(Rlsd2)
-library(umap)
-library(ggside)
-library(treeio)
-library(ggsignif)
-library(ggh4x)
-
-```
 
 ### Full data table
 
 ``` r
-ST548_full_table<-fread("data_tables/TableS1.tsv",header=T,sep="\t")
+ST548_full_table<-fread("data_tables/TableS1.csv",header=T,sep="\t")
 ST548_full_table<-as.data.frame(ST548_full_table)
 rownames(ST548_full_table)<-ST548_full_table$sample_name
 
@@ -137,8 +119,8 @@ Fig1C<-ggplot(x,aes(x=`Number of clusters`,y=`SNP threshold`))+
 
 Fig1<-plot_grid(Fig1A,NULL,plot_grid(Fig1B,NULL,Fig1C,nrow=3,ncol=1,rel_heights = c(1,0.02,0.5),labels = c("B","","C")),nrow=1,ncol=3,rel_widths = c(1,0.02,0.5),labels=c("A","",""))
 
-ggsave(plot = Fig1,filename = "manuscript_figs/tiff/Fig 1.tif",device="tiff",units="in",dpi=600,width = 18,height=9,compression = "lzw")
-ggsave(plot = Fig1,filename = "manuscript_figs/png/Fig 1.png",device="png",units="in",dpi=600,width = 18,height=9)
+ggsave(plot = Fig1,filename = "manuscript_figs/tiff/Fig 1.tif",bg="white",device="tiff",units="in",dpi=600,width = 18,height=9,compression = "lzw")
+ggsave(plot = Fig1,filename = "manuscript_figs/png/Fig 1.png",bg="white",device="png",units="in",dpi=600,width = 18,height=9)
 ```
 
 <p align="center">
@@ -248,13 +230,16 @@ mashtree --file-of-files paths_to_all_public_assemblies.txt --genomesize 4769836
 mash_tree<-ggtree(read.tree("misc_files/FigS1_mashtree.dnd"),size=0.5)+
   geom_tippoint(size=1)+
   geom_tiplab(align=F,geom="text",size=1)+
-    geom_treescale(x = 0.01,y=400,offset = 5)+
-    theme_bw()+
-    theme(axis.text = element_text(color="black",size=14))
+  geom_treescale(x = 0.01,y=400,offset = 5)+
+  theme_bw()+
+  theme(axis.text = element_text(color="black",size=14))+
+  hexpand(0.1,1)+
+  vexpand(0.01,1)
 
 # Delete sample SAMN14167312, it seems too distant to be in the same ST
 
-ggsave(mash_tree,file="manuscript_figs/png/FigS1.png",device = "png",dpi=600,width = 8,height = 8)
+ggsave(mash_tree,file="manuscript_figs/png/FigS1.png",bg="white",device = "png",dpi=600,width = 8,height = 8,units = "in")
+ggsave(mash_tree,file="manuscript_figs/tiff/FigS1.tif",device = "tiff",dpi=600,width = 8,height = 8,compression = "lzw",bg="white",units="in")
 ```
 
 <p align="center">
@@ -359,7 +344,7 @@ za_snp_cluster_0<-clade.members(za_snp_cluster_0_node,tree_lsd2,tip.labels = T)
 
 ## To get node labels
 #x<-ggtree(tree_lsd2,mrsd="2025-06-01")+geom_text2(aes(label=node))
-#ggsave(filename = "node_labels_lsd2_estimated.png",plot=x,device="png",width=25,height=40,units="in",dpi=600)
+#ggsave(filename = "node_labels_lsd2_estimated.png",plot=x,bg="white",device="png",width=25,height=40,units="in",dpi=600)
 
 t<-ggtree(tree_lsd2,mrsd="2025-06-01") %<+% ST548_full_table +
     geom_tippoint(size=1,aes(color=Continent))+
@@ -400,9 +385,9 @@ Fig2<-gheatmap(tt,plasmid_annot[c(1:5)],offset=475,width=0.75,colnames=T,color="
     ggtree::vexpand(.13, 1)+
     guides(color = "none")
 
-ggsave(plot=Fig2,filename = "manuscript_figs/png/Fig 2.png",device="png",units="in",dpi=600,width = 28,height=35)
+ggsave(plot=Fig2,filename = "manuscript_figs/png/Fig 2.png",bg="white",device="png",units="in",dpi=600,width = 28,height=35)
 
-ggsave(plot=Fig2,filename = "manuscript_figs/tiff/Fig 2.tif",device="tiff",units="in",dpi=600,width = 20,height=23,compression = "lzw")
+ggsave(plot=Fig2,filename = "manuscript_figs/tiff/Fig 2.tif",bg="white",device="tiff",units="in",dpi=600,width = 20,height=23,compression = "lzw")
 ```
 
 <p align="center">
@@ -410,12 +395,6 @@ ggsave(plot=Fig2,filename = "manuscript_figs/tiff/Fig 2.tif",device="tiff",units
 <img src="manuscript_figs/png/Fig 2.png" width="70%" height="70%"/>
 
 </p>
-
-### High AMR subclade BEAST
-
-#### Subsampling by SNP-dist/year/location
-
-#### Subsampling stratifying by year and location
 
 ### Supplemental phylogenies
 
@@ -486,8 +465,8 @@ FigS2B<-ggplot(snps[!(snps$`AMR group.x`=="Low-AMR group" & snps$`AMR group.y`==
 
 FigS2<-plot_grid(plot_grid(ggplotify::as.ggplot(FigS2A),NULL,get_legend(FigS2Aleg),NULL,ncol=4,rel_widths = c(1,0.03,0.1,0.03),labels=c("A","")),NULL,FigS2B,ncol=1,labels = c("","","B"),rel_heights = c(1,0.1,0.5))
 
-ggsave(plot=FigS2,filename = "manuscript_figs/tiff/FigS2.tif",device="tiff",units="in",dpi=600,width = 10,height=12,compression = "lzw")
-ggsave(plot=FigS2,filename = "manuscript_figs/png/FigS2.png",device="png",units="in",dpi=600,width = 10,height=12)
+ggsave(plot=FigS2,filename = "manuscript_figs/tiff/FigS2.tif",bg="white",device="tiff",units="in",dpi=600,width = 10,height=12,compression = "lzw")
+ggsave(plot=FigS2,filename = "manuscript_figs/png/FigS2.png",bg="white",device="png",units="in",dpi=600,width = 10,height=12)
 ```
 
 <p align="center">
@@ -564,7 +543,7 @@ t<-ggtree(tree)  %<+% ST548_full_table +
     geom_tippoint(size=2,aes(color=Continent))+
     scale_color_manual(values=cont_pal)+
     new_scale_color()+
-    geom_tiplab(align = T,as_ylab = F,geom = "text",size=3,aes(label=`Data source`,color=`Data source`))+
+    geom_tiplab(align = T,as_ylab = F,geom = "text",size=2,aes(label=`Data source`,color=`Data source`))+
   scale_color_manual(values = c("grey50","#FFFFFF00","#FFFFFF00","black"),guide="none")+
   theme_tree2()+
   theme(panel.grid.major.x = element_line(color="grey85"))+
@@ -575,7 +554,7 @@ t<-ggtree(tree)  %<+% ST548_full_table +
   scale_x_continuous(breaks = c(0,0.5e-05,1e-05,1.5e-05,2e-05,2.5e-05,3e-05))+
   guides(fill = guide_legend(override.aes = list(size=7)))
 
-tt<-gheatmap(t,amrfinder_presabs,offset = 0.000014,width=1,colnames=T,color = "grey80",font.size =3,colnames_offset_y = 1,hjust = 0,colnames_angle = 90,colnames_position = 'top')+
+tt<-gheatmap(t,amrfinder_presabs,offset = 0.000014,width=1,colnames=T,color = "grey80",font.size =2,colnames_offset_y = 1,hjust = 0,colnames_angle = 90,colnames_position = 'top')+
   scale_fill_manual("AMR Class",values=antibiotic_pal)+
   theme(axis.text.x=element_text(size=12,angle=90,hjust=1,vjust=0.5,color="black",face="bold"))+
   guides(colour = guide_legend(override.aes = list(size=5)))+
@@ -583,15 +562,15 @@ tt<-gheatmap(t,amrfinder_presabs,offset = 0.000014,width=1,colnames=T,color = "g
   theme(legend.title=element_text(size=14,face="bold"))+
   new_scale_fill()
 
-FigS3<-gheatmap(tt,plasmid_annot,offset=0.000054,width=1,colnames=T,color="grey80",colnames_angle = 90,colnames_offset_y = 1,colnames_position = "top",font.size = 3,hjust = 0)+
+FigS3<-gheatmap(tt,plasmid_annot,offset=0.000054,width=1,colnames=T,color="grey80",colnames_angle = 90,colnames_offset_y = 1,colnames_position = "top",font.size = 2,hjust = 0)+
   scale_fill_manual("Plasmid",values=c("white","black"),na.value = "white",na.translate=F)+
     theme(axis.text.x=element_text(size=12,angle=90,hjust=1,vjust=0.5,color="black",face="bold"))+
   ggtree::vexpand(.1, 1)+
   guides(color = "none")
 
 
-ggsave(plot=FigS3,filename = "manuscript_figs/png/FigS3.png",device="png",units="in",dpi=600,width = 20,height=23)
-ggsave(plot=FigS3,filename = "manuscript_figs/tiff/FigS3.tif",device="tiff",units="in",dpi=600,width = 20,height=23,compression = "lzw")
+ggsave(plot=FigS3,filename = "manuscript_figs/png/FigS3.png",bg="white",device="png",units="in",dpi=600,width = 20,height=23)
+ggsave(plot=FigS3,filename = "manuscript_figs/tiff/FigS3.tif",bg="white",device="tiff",units="in",dpi=600,width = 20,height=23,compression = "lzw")
 ```
 
 <p align="center">
@@ -609,7 +588,7 @@ t<-ggtree(tree_lsd2,mrsd="2025-06-01") %<+% ST548_full_table +
     geom_tippoint(size=2,aes(color=Continent))+
     scale_color_manual(values=cont_pal)+
     new_scale_color()+
-    geom_tiplab(align = T,as_ylab = F,geom = "text",size=3,aes(label=`Data source`,color=`Data source`))+
+    geom_tiplab(align = T,as_ylab = F,geom = "text",size=2,aes(label=`Data source`,color=`Data source`))+
     scale_color_manual(values = c("grey50","#FFFFFF00","#FFFFFF00","black"),guide="none")+
     theme_tree2()+
     theme(panel.grid.major.x = element_line(color="grey85"))+
@@ -620,7 +599,7 @@ t<-ggtree(tree_lsd2,mrsd="2025-06-01") %<+% ST548_full_table +
   scale_x_continuous(breaks = c(1700,1750,1800,1850,1900,1950,2000))+
   guides(fill = guide_legend(override.aes = list(size=7)))
 
-tt<-gheatmap(t,amrfinder_presabs,offset = 80,width=0.51,colnames=T,color = "grey80",font.size =3,colnames_offset_y = 1,hjust = 0,colnames_angle = 90,colnames_position = 'top')+
+tt<-gheatmap(t,amrfinder_presabs,offset = 80,width=0.51,colnames=T,color = "grey80",font.size =2,colnames_offset_y = 1,hjust = 0,colnames_angle = 90,colnames_position = 'top')+
   scale_fill_manual("AMR Class",values=antibiotic_pal)+
   theme(axis.text.x=element_text(size=12,angle=90,hjust=1,vjust=0.5,color="black",face="bold"))+
   guides(colour = guide_legend(override.aes = list(size=5)))+
@@ -628,14 +607,14 @@ tt<-gheatmap(t,amrfinder_presabs,offset = 80,width=0.51,colnames=T,color = "grey
   theme(legend.title=element_text(size=14,face="bold"))+
   new_scale_fill()
 
-FigS4<-gheatmap(tt,plasmid_annot,offset=200,width=0.51,colnames=T,color="grey80",colnames_angle = 90,colnames_offset_y = 1,colnames_position = "top",font.size = 3,hjust = 0)+
+FigS4<-gheatmap(tt,plasmid_annot,offset=200,width=0.51,colnames=T,color="grey80",colnames_angle = 90,colnames_offset_y = 1,colnames_position = "top",font.size = 2,hjust = 0)+
   scale_fill_manual("Plasmid",values=c("white","black"),na.value = "white",na.translate=F)+
     theme(axis.text.x=element_text(size=12,angle=90,hjust=1,vjust=0.5,color="black",face="bold"))+
   ggtree::vexpand(.1, 1)+
   guides(color = "none")
 
-ggsave(plot=FigS4,filename = "manuscript_figs/png/FigS4.png",device="png",units="in",dpi=600,width = 20,height=23)
-ggsave(plot=FigS4,filename = "manuscript_figs/tiff/FigS4.tif",device="tiff",units="in",dpi=600,width = 20,height=23,compression = "lzw")
+ggsave(plot=FigS4,filename = "manuscript_figs/png/FigS4.png",bg="white",device="png",units="in",dpi=600,width = 25,height=23)
+ggsave(plot=FigS4,filename = "manuscript_figs/tiff/FigS4.tif",bg="white",device="tiff",units="in",dpi=600,width = 25,height=23,compression = "lzw")
 ```
 
 <p align="center">
@@ -653,7 +632,7 @@ t<-ggtree(tree_lsd2,mrsd="2025-06-01") %<+% ST548_full_table +
     geom_tippoint(size=2,aes(color=Continent))+
     scale_color_manual(values=cont_pal)+
     new_scale_color()+
-    geom_tiplab(align = T,as_ylab = F,geom = "text",size=3,aes(label=`Data source`,color=`Data source`))+
+    geom_tiplab(align = T,as_ylab = F,geom = "text",size=2,aes(label=`Data source`,color=`Data source`))+
     scale_color_manual(values = c("grey50","#FFFFFF00","#FFFFFF00","black"),guide="none")+
     theme_tree2()+
     theme(panel.grid.major.x = element_line(color="grey85"))+
@@ -665,7 +644,7 @@ t<-ggtree(tree_lsd2,mrsd="2025-06-01") %<+% ST548_full_table +
   scale_x_continuous(breaks = c(1700,1750,1800,1850,1900,1950,2000))+
   guides(fill = guide_legend(override.aes = list(size=7)))
 
-tt<-gheatmap(t,amrfinder_presabs,offset = 80,width=0.51,colnames=T,color = "grey80",font.size =3,colnames_offset_y = 1,hjust = 0,colnames_angle = 90,colnames_position = 'top')+
+tt<-gheatmap(t,amrfinder_presabs,offset = 80,width=0.51,colnames=T,color = "grey80",font.size =2,colnames_offset_y = 1,hjust = 0,colnames_angle = 90,colnames_position = 'top')+
   scale_fill_manual("AMR Class",values=antibiotic_pal)+
   theme(axis.text.x=element_text(size=12,angle=90,hjust=1,vjust=0.5,color="black",face="bold"))+
   guides(colour = guide_legend(override.aes = list(size=5)))+
@@ -673,14 +652,14 @@ tt<-gheatmap(t,amrfinder_presabs,offset = 80,width=0.51,colnames=T,color = "grey
   theme(legend.title=element_text(size=14,face="bold"))+
   new_scale_fill()
 
-FigS5<-gheatmap(tt,plasmid_annot,offset=200,width=0.51,colnames=T,color="grey80",colnames_angle = 90,colnames_offset_y = 1,colnames_position = "top",font.size = 3,hjust = 0)+
+FigS5<-gheatmap(tt,plasmid_annot,offset=200,width=0.51,colnames=T,color="grey80",colnames_angle = 90,colnames_offset_y = 1,colnames_position = "top",font.size = 2,hjust = 0)+
   scale_fill_manual("Plasmid",values=c("white","black"),na.value = "white",na.translate=F)+
     theme(axis.text.x=element_text(size=12,angle=90,hjust=1,vjust=0.5,color="black",face="bold"))+
   ggtree::vexpand(.1, 1)+
   guides(color = "none")
 
-ggsave(plot=FigS5,filename = "manuscript_figs/png/FigS5.png",device="png",units="in",dpi=600,width = 20,height=23)
-ggsave(plot=FigS5,filename = "manuscript_figs/tiff/FigS5.tif",device="tiff",units="in",dpi=600,width = 20,height=23,compression = "lzw")
+ggsave(plot=FigS5,filename = "manuscript_figs/png/FigS5.png",bg="white",device="png",units="in",dpi=600,width = 25,height=23)
+ggsave(plot=FigS5,filename = "manuscript_figs/tiff/FigS5.tif",bg="white",device="tiff",units="in",dpi=600,width = 25,height=23,compression = "lzw")
 ```
 
 <p align="center">
@@ -731,7 +710,7 @@ t<-ggtree(tree_highamr) %<+% ST548_full_table +
   scale_x_continuous(breaks=c(0,2.5e-6,5e-6,7.5e-6,1e-5))+
   guides(fill = guide_legend(override.aes = list(size=7)))
 
-tt<-gheatmap(t,amrfinder_presabs,offset = 3.5e-6,width=0.51,colnames=T,color = "grey80",font.size =3,colnames_offset_y = 1,hjust = 0,colnames_angle = 90,colnames_position = 'top')+
+tt<-gheatmap(t,amrfinder_presabs,offset = 3.5e-6,width=0.51,colnames=T,color = "grey80",font.size =2,colnames_offset_y = 1,hjust = 0,colnames_angle = 90,colnames_position = 'top')+
   scale_fill_manual("AMR Class",values=antibiotic_pal)+
   theme(axis.text.x=element_text(size=12,angle=90,hjust=1,vjust=0.5,color="black",face="bold"))+
   guides(colour = guide_legend(override.aes = list(size=5)))+
@@ -819,7 +798,7 @@ t<-ggtree(tree_highamr_lsd2,mrsd="2025-06-01") %<+% ST548_full_table +
     geom_tippoint(size=2,aes(color=Continent))+
     scale_color_manual(values=cont_pal)+
     new_scale_color()+
-    geom_tiplab(align = T,as_ylab = F,geom = "text",size=3,aes(label=`Data source`,color=`Data source`))+
+    geom_tiplab(align = T,as_ylab = F,geom = "text",size=2,aes(label=`Data source`,color=`Data source`))+
     scale_color_manual(values = c("grey50","#FFFFFF00","#FFFFFF00","black"),guide="none")+
     theme_tree2()+
     theme(panel.grid.major.x = element_line(color="grey85"))+
@@ -828,7 +807,7 @@ t<-ggtree(tree_highamr_lsd2,mrsd="2025-06-01") %<+% ST548_full_table +
   scale_x_continuous(breaks = c(2000,2005,2010,2015,2020))+
   guides(fill = guide_legend(override.aes = list(size=7)))
 
-tt<-gheatmap(t,amrfinder_presabs,offset = 5,width=0.51,colnames=T,color = "grey80",font.size =3,colnames_offset_y = 1,hjust = 0,colnames_angle = 90,colnames_position = 'top')+
+tt<-gheatmap(t,amrfinder_presabs,offset = 5,width=0.51,colnames=T,color = "grey80",font.size =2,colnames_offset_y = 1,hjust = 0,colnames_angle = 90,colnames_position = 'top')+
   scale_fill_manual("AMR Class",values=antibiotic_pal)+
   theme(axis.text.x=element_text(size=12,angle=90,hjust=1,vjust=0.5,color="black",face="bold"))+
   guides(colour = guide_legend(override.aes = list(size=5)))+
@@ -836,7 +815,7 @@ tt<-gheatmap(t,amrfinder_presabs,offset = 5,width=0.51,colnames=T,color = "grey8
   theme(legend.title=element_text(size=14,face="bold"))+
   new_scale_fill()
 
-FigS6B<-gheatmap(tt,plasmid_annot,offset=15,width=0.51,colnames=T,color="grey80",colnames_angle = 90,colnames_offset_y = 1,colnames_position = "top",font.size = 3,hjust = 0)+
+FigS6B<-gheatmap(tt,plasmid_annot,offset=15,width=0.51,colnames=T,color="grey80",colnames_angle = 90,colnames_offset_y = 1,colnames_position = "top",font.size = 2,hjust = 0)+
   scale_fill_manual("Plasmid",values=c("white","black"),na.value = "white",na.translate=F)+
     theme(axis.text.x=element_text(size=12,angle=90,hjust=1,vjust=0.5,color="black",face="bold"))+
   ggtree::vexpand(.1, 1)+
@@ -846,8 +825,8 @@ FigS6Bleg<-get_legend(FigS6B)
 
 FigS6<-plot_grid(plot_grid((FigS6A+theme(legend.position="none")),NULL,(FigS6B+theme(legend.position="none")),labels=c("A","","B"),ncol=1,rel_heights = c(1,0.1,1)),NULL,ggplotify::as.ggplot(FigS6Bleg),labels=c("","",""),ncol=3,rel_widths = c(1,0.05,0.2))
 
-ggsave(plot=FigS6,filename = "manuscript_figs/png/FigS6.png",device="png",units="in",dpi=600,width = 20,height=23)
-ggsave(plot=FigS6,filename = "manuscript_figs/tiff/FigS6.tif",device="tiff",units="in",dpi=600,width = 20,height=23,compression = "lzw")
+ggsave(plot=FigS6,filename = "manuscript_figs/png/FigS6.png",bg="white",device="png",units="in",dpi=600,width = 25,height=23)
+ggsave(plot=FigS6,filename = "manuscript_figs/tiff/FigS6.tif",bg="white",device="tiff",units="in",dpi=600,width = 25,height=23,compression = "lzw")
 ```
 
 <p align="center">
@@ -930,8 +909,8 @@ Fig3<-ggplot(data=umap_df,aes(x=umap1,y=umap2,fill=Continent))+
   scale_fill_manual(values=c("cyan","black"))+
   theme(ggside.panel.scale = .3)
 
-ggsave(plot=Fig3,filename = "manuscript_figs/tiff/Fig 3.tif",device="tiff",units="in",dpi=600,width = 7,height=5,compression = "lzw")
-ggsave(plot=Fig3,filename = "manuscript_figs/png/Fig 3.png",device="png",units="in",dpi=600,width = 7,height=5)
+ggsave(plot=Fig3,filename = "manuscript_figs/tiff/Fig 3.tif",bg="white",device="tiff",units="in",dpi=600,width = 7,height=5,compression = "lzw")
+ggsave(plot=Fig3,filename = "manuscript_figs/png/Fig 3.png",bg="white",device="png",units="in",dpi=600,width = 7,height=5)
 ```
 
 <p align="center">
@@ -967,8 +946,8 @@ Fig4<-ggplot(genomad_amrfinder[genomad_amrfinder$`Gene symbol` %in% c("aadA1","a
   scale_color_manual(values=c("black","black","black"))+
   labs(y="Genomad score")
 
-ggsave(Fig4,filename = "manuscript_figs/tiff/Fig 4.tif",device="tiff",units="in",dpi=600,width = 18,height=5,compression = "lzw")
-ggsave(Fig4,filename = "manuscript_figs/png/Fig 4.png",device="png",units="in",dpi=600,width = 18,height=5)
+ggsave(Fig4,filename = "manuscript_figs/tiff/Fig 4.tif",bg="white",device="tiff",units="in",dpi=600,width = 18,height=5,compression = "lzw")
+ggsave(Fig4,filename = "manuscript_figs/png/Fig 4.png",bg="white",device="png",units="in",dpi=600,width = 18,height=5)
 
 ### Genomad test
 
@@ -1017,8 +996,8 @@ genomad_S3<-ggplot(genomad_summary,aes(x=amr,y=plasmid_score))+
 FigS7<-plot_grid(plot_grid(genomad_S1,NULL,genomad_S2,nrow=3,labels = c("A","","B"),rel_heights = c(1,0.1,1)),NULL,genomad_S3,nrow=1,labels = c("","","C"),rel_widths = c(1,0.1,1))
 
 
-ggsave(filename = "manuscript_figs/tiff/FigS7.tif",device="tiff",units="in",dpi=600,width = 7,height=7,compression = "lzw",plot=FigS7)
-ggsave(filename = "manuscript_figs/png/FigS7.png",device="png",units="in",dpi=600,width = 7,height=7,plot=FigS7)
+ggsave(filename = "manuscript_figs/tiff/FigS7.tif",bg="white",device="tiff",units="in",dpi=600,width = 7,height=7,compression = "lzw",plot=FigS7)
+ggsave(filename = "manuscript_figs/png/FigS7.png",bg="white",device="png",units="in",dpi=600,width = 7,height=7,plot=FigS7)
 ```
 
 <p align="center">
@@ -1060,7 +1039,7 @@ esearch -db biosample -query $biosample_ID | efetch -format xml | xtract -patter
 ``` r
 ctxm8<-amrfindersummary$sample_name[amrfindersummary$`Gene symbol`=="blaCTX-M-8"]
 
-s<-fread("Supplemental datasets/Dataset_S17.tsv",header=F,sep="\t",col.names = c("sample1","sample2","snps"))
+s<-fread("Supplemental datasets/Dataset_S18.tsv",header=F,sep="\t",col.names = c("sample1","sample2","snps"))
 
 # remove reference 
 s_matrix <- dcast(s[s$sample1!="GCA_006209225.1_PDT000316796.1" & s$sample2!="GCA_006209225.1_PDT000316796.1",], sample1 ~ sample2, value.var = "snps")
@@ -1069,27 +1048,27 @@ s_matrix<-as.data.frame(s_matrix)
 rownames(s_matrix)<-s_matrix$sample1
 s_matrix <- s_matrix[,-1]
 
-s18<-fread("Supplemental datasets/Dataset_S18.tsv",header=T,sep="\t",na.strings = c("NA","missing","not collected", "not provided","Not available","not applicable"))
+s19<-fread("Supplemental datasets/Dataset_S19.tsv",header=T,sep="\t",na.strings = c("NA","missing","not collected", "not provided","Not available","not applicable"))
 
 # Reformatting country column
-s18$Country<-gsub(":.*","",s18$Country)
+s19$Country<-gsub(":.*","",s19$Country)
 
 #Reformatting dates column
-s18$collection_date<-gsub("-.*","",s18$collection_date)
+s19$collection_date<-gsub("-.*","",s19$collection_date)
 
 # Writing continents column
 library(countrycode)
-s18$Continent<-countrycode(sourcevar = s18$Country,origin = "country.name",destination = "continent",custom_match = c(Canada = "North America" , USA = "North America"))
-s18$Continent<-gsub("Americas","South America",s18$Continent)
+s19$Continent<-countrycode(sourcevar = s19$Country,origin = "country.name",destination = "continent",custom_match = c(Canada = "North America" , USA = "North America"))
+s19$Continent<-gsub("Americas","South America",s19$Continent)
 
-s18$`Data source`<-"ATB"
+s19$`Data source`<-"ATB"
 
 # Remove ATB samples that were already included in the full dataset
-s18<-s18[!s18$biosample %in% ctxm8,]
+s19<-s19[!s19$biosample %in% ctxm8,]
 # Keep only Salmonella enterica Minnesota (i.e samples the SNP-dist estimation was done for)
-s18<-s18[s18$biosample %in% unique(s$sample1),]
+s19<-s19[s19$biosample %in% unique(s$sample1),]
 
-b<-rbind((s18[,c(1,7,4,5,8,9)]),(ST548_full_table[ST548_full_table$sample_name %in% ctxm8,c(1,6,2,3,4,5)]),use.names=F)
+b<-rbind((s19[,c(1,7,4,5,8,9)]),(ST548_full_table[ST548_full_table$sample_name %in% ctxm8,c(1,6,2,3,4,5)]),use.names=F)
 b<-as.data.frame(b)
 rownames(b)<-b$biosample
 b$collection_date<-as.factor(b$collection_date)
@@ -1116,8 +1095,8 @@ FigS8<-pheatmap::pheatmap(s_matrix,
                   silent=T
                    )
 
-ggsave(filename = "manuscript_figs/tiff/FigS8.tif",plot=ggplotify::as.ggplot(FigS8),device="tiff",units="in",dpi=600,width = 16,height=12,compression = "lzw")
-ggsave(filename = "manuscript_figs/png/FigS8.png",plot=ggplotify::as.ggplot(FigS8),device="png",units="in",dpi=600,width = 16,height=12)
+ggsave(filename = "manuscript_figs/tiff/FigS8.tif",plot=ggplotify::as.ggplot(FigS8),bg="white",device="tiff",units="in",dpi=600,width = 16,height=12,compression = "lzw")
+ggsave(filename = "manuscript_figs/png/FigS8.png",plot=ggplotify::as.ggplot(FigS8),bg="white",device="png",units="in",dpi=600,width = 16,height=12)
 ```
 
 <p align="center">
@@ -1243,7 +1222,7 @@ cat bedgraph_files/*_rpoD.bg > blactxm8_rpoD_align_summary.txt
 cat bedgraph_files/*_plasmidref.bg > blactxm8_plsdb_plasmids_align_summary.txt
 ```
 
-#### Calculate coverage and number of mapped reads (Done on dardel)
+#### Calculate coverage and number of mapped reads
 
 ``` r
 library(IRanges)
@@ -1322,7 +1301,7 @@ df_coverage$blactxm8 <- ifelse(df_coverage$sample_name %in% ctxm8, "yes", "no")
 # Rename column
 df_coverage$`Log10 normalized no. of reads`<-log10(df_coverage$normalized_reads)
 
-write.table(df_coverage,file="Supplemental datasets/Dataset_S14.tsv",quote=F,row.names=F,col.names=T,sep="\t")
+write.table(df_coverage,file="Supplemental datasets/Dataset_S15.tsv",quote=F,row.names=F,col.names=T,sep="\t")
 ```
 
 #### Plots
@@ -1330,11 +1309,11 @@ write.table(df_coverage,file="Supplemental datasets/Dataset_S14.tsv",quote=F,row
 ##### SEPI mapping to blaCTX-M-8 plasmids
 
 ``` r
-df_coverage<-fread("Supplemental datasets/Dataset_S14.tsv",sep="\t",header=T)
+df_coverage<-fread("Supplemental datasets/Dataset_S15.tsv",sep="\t",header=T)
 
 # Pangenome
 
-plasmidpan<-fread("Supplemental datasets/Dataset_S12.tsv",header=T,sep="\t")
+plasmidpan<-fread("Supplemental datasets/Dataset_S13.tsv",header=T,sep="\t")
 
 plasmidpan<-as.data.frame(plasmidpan)
 rownames(plasmidpan)<-plasmidpan$Gene
@@ -1342,7 +1321,7 @@ plasmidpan<-plasmidpan[plasmidpan$`CP134392 (E. coli)`==1 | plasmidpan$`CP146619
 
 plasmidpanheat<-t(plasmidpan[,-1])
 
-fig5A<-ggplotify::as.ggplot(pheatmap::pheatmap(plasmidpanheat,silent = T,legend = F,fontsize = 10,cutree_rows = 3,border_color = "black",color = c("white","black")))
+fig5A<-ggplotify::as.ggplot(pheatmap::pheatmap(plasmidpanheat,silent = T,legend = F,fontsize_col = 6, fontsize_row = 11,cutree_rows = 3,border_color = "black",color = c("white","black")))
 
 # Read mapping
 
@@ -1369,13 +1348,13 @@ var.test(df_coverage$coverage[df_coverage$sample_name %in% sepi & df_coverage$pl
         F test to compare two variances
 
     data:  df_coverage$coverage[df_coverage$sample_name %in% sepi & df_coverage$plasmid_blactxm8 == "yes" & df_coverage$blactxm8 == "yes"] and df_coverage$coverage[df_coverage$sample_name %in% sepi & df_coverage$plasmid_blactxm8 == "yes" & df_coverage$blactxm8 == "no"]
-    F = 1.1526, num df = 279, denom df = 439, p-value = 0.1851
+    F = 1.1532, num df = 293, denom df = 461, p-value = 0.1729
     alternative hypothesis: true ratio of variances is not equal to 1
     95 percent confidence interval:
-     0.9342404 1.4292626
+     0.9394768 1.4225292
     sample estimates:
     ratio of variances 
-              1.152597 
+              1.153238 
 
 ``` r
 var.test(df_coverage$coverage[df_coverage$sample_name %in% sepi & df_coverage$plasmid_blactxm8 =="no" & df_coverage$blactxm8=="yes"],df_coverage$coverage[df_coverage$sample_name %in% sepi & df_coverage$plasmid_blactxm8 =="no" & df_coverage$blactxm8=="no"])
@@ -1401,13 +1380,13 @@ var.test(df_coverage$`Log10 normalized no. of reads`[df_coverage$sample_name %in
         F test to compare two variances
 
     data:  df_coverage$`Log10 normalized no. of reads`[df_coverage$sample_name %in% sepi & df_coverage$plasmid_blactxm8 == "yes" & df_coverage$blactxm8 == "yes"] and df_coverage$coverage[df_coverage$sample_name %in% sepi & df_coverage$plasmid_blactxm8 == "yes"]
-    F = 6.3584, num df = 279, denom df = 719, p-value < 2.2e-16
+    F = 6.3091, num df = 293, denom df = 755, p-value < 2.2e-16
     alternative hypothesis: true ratio of variances is not equal to 1
     95 percent confidence interval:
-     5.250059 7.767016
+     5.233019 7.668645
     sample estimates:
     ratio of variances 
-              6.358429 
+               6.30907 
 
 ``` r
 var.test(df_coverage$`Log10 normalized no. of reads`[df_coverage$sample_name %in% sepi & df_coverage$plasmid_blactxm8 =="no" & df_coverage$blactxm8=="yes"],df_coverage$coverage[df_coverage$sample_name %in% sepi & df_coverage$plasmid_blactxm8 =="no"])
@@ -1464,27 +1443,33 @@ fig5c<-df_coverage[df_coverage$sample_name %in% sepi,c(1,2,3,7,9,8)] %>%
     scale_color_manual(values=c("black","red"))+
     facet_grid(metric~plasmid_blactxm8,scales = "free_y",labeller=as_labeller(c(no = "blaCTX-M-8 negative plasmid",yes="blaCTX-M-8 positive plasmid",coverage="Coverage",`Log10 normalized no. of reads`="Log10 normalized no. of reads")))+
     theme_bw()+
-    theme(axis.title.x = element_text(color="black",size=14,face="bold"))+
-    theme(axis.title.y = element_text(color="black",size=14,face="bold"))+
-    theme(axis.text.x = element_text(color="black",size=12))+
-    theme(axis.text.y = element_text(color="black",size=12))+
-    theme(strip.text = element_text(color="black",size=10,face="bold"))+
+    theme(axis.title.x = element_text(color="black",size=12,face="bold"))+
+    theme(axis.title.y = element_text(color="black",size=12,face="bold"))+
+    theme(axis.text.x = element_text(color="black",size=10))+
+    theme(axis.text.y = element_text(color="black",size=10))+
+    theme(strip.text = element_text(color="black",size=8,face="bold"))+
     theme(legend.position = 'none')+
     theme(strip.background = element_rect(fill = NA))+
     theme(plot.margin = margin(t = 40, r = 20,b = 40,l = 20))+
     labs(x="blaCTX-M-8 detected in assembly")+
     geom_text(data=siginf,aes(label=sig,x=1.5,y=0),inherit.aes = FALSE,size = 12,fontface="bold")
 
-fig5ac<-plot_grid(fig5A,fig5c,labels=c("A","C"),rel_widths = c(1,0.7))
+fig5ac<-plot_grid(fig5A,fig5c,labels=c("A","C"),rel_widths = c(1,0.5))
 
 fig5b<-ggplotify::as.ggplot(grid::rasterGrob(png::readPNG("misc_files/clinker_SEPI290_ecoli_mbandaka.png"),interpolate=T))
 
 Fig5<-plot_grid(fig5ac,NULL,fig5b,labels=c("","","B"),rel_heights = c(1,0.1,0.4),nrow=3,ncol=1)
 
 
-ggsave(plot=Fig5,filename = "manuscript_figs/tiff/Fig 5.tif",device="tiff",units="in",dpi=600,width = 20,height=20,compression = "lzw")
-ggsave(plot=Fig5,filename = "manuscript_figs/png/Fig 5.png",device="png",units="in",dpi=600,width = 20,height=20)
+ggsave(plot=Fig5,filename = "manuscript_figs/tiff/Fig 5.tif",bg="white",device="tiff",units="in",dpi=600,width = 16,height=10,compression = "lzw")
+ggsave(plot=Fig5,filename = "manuscript_figs/png/Fig 5.png",bg="white",device="png",units="in",dpi=600,width = 16,height=10)
 ```
+
+<p align="center">
+
+<img src="manuscript_figs/png/Fig 5.png" width="70%" height="70%"/>
+
+</p>
 
 ##### ST548 (SRA Set + SEPI) read mapping
 
@@ -1537,7 +1522,7 @@ pla<-df_coverage[df_coverage$plasmid_blactxm8=="yes",c(1,2,3,7,9,8)] %>%
     theme(axis.title.y = element_text(color="black",size=14,face="bold"))+
     theme(axis.text.x = element_text(color="black",size=12))+
     theme(axis.text.y = element_text(color="black",size=12))+
-    theme(strip.text = element_text(color="black",size=8,face="bold"))+
+    theme(strip.text = element_text(color="black",size=6,face="bold"))+
     theme(legend.position = 'none')+
     theme(strip.background = element_rect(fill = NA))+
     labs(x="blaCTX-M-8 detected in assembly",subtitle="Alignment against blaCTX-M-8+ plasmids")+
@@ -1563,14 +1548,20 @@ plb<-df_coverage[df_coverage$plasmid_blactxm8=="no" ,c(1,2,3,7,9,8)] %>%
 
 FigS9<-plot_grid(pla,NULL,plb,nrow=3,ncol=1,labels=c("A","","B"),rel_heights = c(1,0.1,1))
 
-ggsave(plot=FigS9,filename = "manuscript_figs/tiff/FigS9.tif",device="tiff",units="in",dpi=600,width = 24,height=8,compression = "lzw")
-ggsave(plot=FigS9,filename = "manuscript_figs/png/FigS9.png",device="png",units="in",dpi=600,width = 24,height=8)
+ggsave(plot=FigS9,filename = "manuscript_figs/tiff/FigS9.tif",bg="white",device="tiff",units="in",dpi=600,width = 24,height=8,compression = "lzw")
+ggsave(plot=FigS9,filename = "manuscript_figs/png/FigS9.png",bg="white",device="png",units="in",dpi=600,width = 24,height=8)
 ```
+
+<p align="center">
+
+<img src="manuscript_figs/png/FigS9.png" width="70%" height="70%"/>
+
+</p>
 
 ### IS elements vs AMR associations
 
 ``` r
-isescan<-fread("Supplemental datasets/Dataset_S15.tsv",header=F,sep="\t",col.names=c("sample_name","Contig id","IS_id","nIS","Genome_perc","bpIS","dnaLEN"))
+isescan<-fread("Supplemental datasets/Dataset_S16.tsv",header=F,sep="\t",col.names=c("sample_name","Contig id","IS_id","nIS","Genome_perc","bpIS","dnaLEN"))
 isescan<-isescan[isescan$sample_name %in% ST548_full_table$sample_name,]
 
 isescan_presabs<- as.data.frame(isescan[,c(1,3)]) %>%
@@ -1634,8 +1625,8 @@ FigS10<-ggplotify::as.ggplot(pheatmap::pheatmap(t(cor_matrix),
 
 
 
-ggsave(plot=FigS10,filename = "manuscript_figs/tiff/FigS10.tif",device="tiff",units="in",dpi=600,width = 14,height=10,compression = "lzw")
-ggsave(plot=FigS10,filename = "manuscript_figs/png/FigS10.png",device="png",units="in",dpi=600,width = 14,height=10)
+ggsave(plot=FigS10,filename = "manuscript_figs/tiff/FigS10.tif",bg="white",device="tiff",units="in",dpi=600,width = 14,height=10,compression = "lzw")
+ggsave(plot=FigS10,filename = "manuscript_figs/png/FigS10.png",bg="white",device="png",units="in",dpi=600,width = 14,height=10)
 ```
 
 <p align="center">
