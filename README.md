@@ -8,7 +8,7 @@ Link to raw data and intermediate files - <https://doi.org/10.5281/zenodo.150636
 
 Link to BioProject deposit - [PRJNA1230142](https://www.ncbi.nlm.nih.gov/bioproject/?term=PRJNA1230142)
 
-Link to preprint - <https://www.medrxiv.org/content/10.1101/2025.04.16.25325939v2> (Currently still the version prior to revisions)
+Link to publication - <https://doi.org/10.1099/mgen.0.001633>
 
 ## Load libraries
 
